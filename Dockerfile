@@ -12,8 +12,10 @@ ENV CONTAINER_USER="analyticalplatform" \
     CONTAINER_GID="1000" \
     DEBIAN_FRONTEND="noninteractive" \
     JUPYTERLAB_VERSION="4.2.3" \
+    JUPYTERLAB_GIT_VERSION="0.50.1" \
     MINICONDA_VERSION="24.5.0-0" \
     MINICONDA_SHA256="4b3b3b1b99215e85fd73fb2c2d7ebf318ac942a457072de62d885056556eb83e" \
+    PIP_BREAK_SYSTEM_PACKAGES="1" \
     PATH="/opt/conda/bin:${HOME}/.local/bin:${PATH}"
 
 SHELL ["/bin/bash", "-e", "-u", "-o", "pipefail", "-c"]
@@ -58,7 +60,9 @@ EOF
 
 # JupyterLab
 RUN <<EOF
-python3 -m pip install --break-system-packages --no-cache-dir "jupyterlab==${JUPYTERLAB_VERSION}"
+python3 -m pip install --break-system-packages --no-cache-dir \
+  "jupyterlab==${JUPYTERLAB_VERSION}" \
+  "jupyterlab-git==${JUPYTERLAB_GIT_VERSION}"
 EOF
 
 # Miniconda

@@ -3,6 +3,9 @@ IMAGE_NAME = ghcr.io/ministryofjustice/analytical-platform-jupyterlab:latest
 test: build
 	container-structure-test test --config test/container-structure-test.yml --image $(IMAGE_NAME)
 
+run: build
+	docker run -it --rm --publish 8080:8080 ghcr.io/ministryofjustice/analytical-platform-jupyterlab:latest
+
 build:
 	@ARCH=`uname -m`; \
 	case $$ARCH in \
