@@ -24,11 +24,6 @@ commandTests:
     args: ["--groups", "analyticalplatform"]
     expectedOutput: ["100"]
 
-  # - name: "aws"
-  #   command: "aws"
-  #   args: ["--version"]
-  #   expectedOutput: ["aws-cli/2.*"]
-
   - name: "conda"
     command: "conda"
     args: ["info"]
@@ -39,24 +34,29 @@ commandTests:
     args: ["--version"]
     expectedOutput: ["pip.*"]
 
+  - name: "node"
+    command: "node"
+    args: ["--version"]
+    expectedOutput: ["v20.15.1"]
+
 fileContentTests:
-  # - name: "bashrc first-run-notice"
-  #   path: "/etc/bash.bashrc"
-  #   expectedContents: ["# This is a first run notice for Visual Studio Code"]
+  - name: "bashrc first-run-notice"
+    path: "/etc/bash.bashrc"
+    expectedContents: ["# This is a first run notice for JupyterLab"]
 
 fileExistenceTests:
-  # - name: "/opt/visual-studio-code"
-  #   path: "/opt/visual-studio-code"
-  #   shouldExist: true
+  - name: "/opt/jupyterlab"
+    path: "/opt/jupyterlab"
+    shouldExist: true
 
-  # - name: "/opt/visual-studio-code/.bashrc"
-  #   path: "/opt/visual-studio-code/.bashrc"
-  #   shouldExist: true
+  - name: "/opt/jupyterlab/.bashrc"
+    path: "/opt/jupyterlab/.bashrc"
+    shouldExist: true
 
-  # - name: "/opt/visual-studio-code/.bash_logout"
-  #   path: "/opt/visual-studio-code/.bash_logout"
-  #   shouldExist: true
+  - name: "/opt/jupyterlab/.bash_logout"
+    path: "/opt/jupyterlab/.bash_logout"
+    shouldExist: true
 
-  # - name: "/opt/visual-studio-code/.profile"
-  #   path: "/opt/visual-studio-code/.profile"
-  #   shouldExist: true
+  - name: "/opt/jupyterlab/.profile"
+    path: "/opt/jupyterlab/.profile"
+    shouldExist: true

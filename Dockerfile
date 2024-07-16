@@ -11,10 +11,11 @@ ENV CONTAINER_USER="analyticalplatform" \
     CONTAINER_GROUP="analyticalplatform" \
     CONTAINER_GID="1000" \
     DEBIAN_FRONTEND="noninteractive" \
-    JUPYTERLAB_VERSION="4.2.3" \
-    JUPYTERLAB_GIT_VERSION="0.50.1" \
     MINICONDA_VERSION="24.5.0-0" \
     MINICONDA_SHA256="4b3b3b1b99215e85fd73fb2c2d7ebf318ac942a457072de62d885056556eb83e" \
+    NODE_LTS_VERSION="20.15.1" \
+    JUPYTERLAB_VERSION="4.2.3" \
+    JUPYTERLAB_GIT_VERSION="0.50.1" \
     PIP_BREAK_SYSTEM_PACKAGES="1" \
     PATH="/opt/conda/bin:${HOME}/.local/bin:${PATH}"
 
@@ -56,13 +57,39 @@ apt-get install --yes \
 apt-get clean --yes
 
 rm --force --recursive /var/lib/apt/lists/*
+
+install --directory --owner ${CONTAINER_USER} --group ${CONTAINER_GROUP} --mode 0755 /opt/jupyterlab
 EOF
 
-# JupyterLab
+# Backup Bash configuration
 RUN <<EOF
-python3 -m pip install --break-system-packages --no-cache-dir \
-  "jupyterlab==${JUPYTERLAB_VERSION}" \
-  "jupyterlab-git==${JUPYTERLAB_GIT_VERSION}"
+cp /home/analyticalplatform/.bashrc /opt/jupyterlab/.bashrc
+
+cp /home/analyticalplatform/.bash_logout /opt/jupyterlab/.bash_logout
+
+cp /home/analyticalplatform/.profile /opt/jupyterlab/.profile
+EOF
+
+# First run notice
+COPY src/opt/jupyterlab/first-run-notice.txt /opt/jupyterlab/first-run-notice.txt
+COPY src/etc/bash.bashrc.snippet /etc/bash.bashrc.snippet
+RUN <<EOF
+cat /etc/bash.bashrc.snippet >> /etc/bash.bashrc
+EOF
+
+# NodeJS
+RUN <<EOF
+curl --location --fail-with-body \
+  "https://deb.nodesource.com/setup_lts.x" \
+  --output "node.sh"
+
+bash node.sh
+
+apt-get install --yes "nodejs=${NODE_LTS_VERSION}-1nodesource1"
+
+apt-get clean --yes
+
+rm --force --recursive /var/lib/apt/lists/* node.sh
 EOF
 
 # Miniconda
@@ -78,6 +105,13 @@ bash miniconda.sh -b -p /opt/conda
 chown --recursive "${CONTAINER_USER}":"${CONTAINER_GROUP}" /opt/conda
 
 rm --force miniconda.sh
+EOF
+
+# JupyterLab
+RUN <<EOF
+conda install --yes \
+  "conda-forge::jupyterlab==${JUPYTERLAB_VERSION}" \
+  "conda-forge::jupyterlab-git==${JUPYTERLAB_GIT_VERSION}"
 EOF
 
 USER ${CONTAINER_USER}
