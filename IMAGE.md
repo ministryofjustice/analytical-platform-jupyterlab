@@ -17,8 +17,8 @@ all-spark-notebook
         base-notebook
           docker-stacks-foundation
 
-docker-stacks-foundation: NO
-base-notebook: NO
+docker-stacks-foundation: YES
+base-notebook: YES
 minimal-notebook: NO
 scipy-notebook: NO
 datascience-notebook: NO

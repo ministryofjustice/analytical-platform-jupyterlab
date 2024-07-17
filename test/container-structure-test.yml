@@ -39,6 +39,11 @@ commandTests:
     args: ["--version"]
     expectedOutput: ["v20.15.1"]
 
+  - name: "R"
+    command: "R"
+    args: ["--version"]
+    expectedOutput: ["R version 4.4.1"]
+
 fileContentTests:
   - name: "bashrc first-run-notice"
     path: "/etc/bash.bashrc"

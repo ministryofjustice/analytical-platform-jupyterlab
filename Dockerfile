@@ -16,6 +16,7 @@ ENV CONTAINER_USER="analyticalplatform" \
     NODE_LTS_VERSION="20.15.1" \
     JUPYTERLAB_VERSION="4.2.3" \
     JUPYTERLAB_GIT_VERSION="0.50.1" \
+    R_VERSION="4.4.1-1.2404.0" \
     PIP_BREAK_SYSTEM_PACKAGES="1" \
     PATH="/opt/conda/bin:${HOME}/.local/bin:${PATH}"
 
@@ -112,7 +113,58 @@ RUN <<EOF
 conda install --yes \
   "conda-forge::jupyterlab==${JUPYTERLAB_VERSION}" \
   "conda-forge::jupyterlab-git==${JUPYTERLAB_GIT_VERSION}"
+
+conda clean --all
 EOF
+
+# R
+RUN <<EOF
+curl --location --fail-with-body \
+  "https://cloud.r-project.org/bin/linux/ubuntu/marutter_pubkey.asc" \
+  --output "marutter_pubkey.asc"
+
+cat marutter_pubkey.asc | gpg --dearmor --output marutter_pubkey.gpg
+
+install -D --owner root --group root --mode 644 marutter_pubkey.gpg /etc/apt/keyrings/marutter_pubkey.gpg
+
+echo "deb [signed-by=/etc/apt/keyrings/marutter_pubkey.gpg] https://cloud.r-project.org/bin/linux/ubuntu noble-cran40/" > /etc/apt/sources.list.d/cran.list
+
+apt-get update --yes
+
+apt-get install --yes "r-base=${R_VERSION}"
+
+apt-get clean --yes
+
+rm --force --recursive marutter_pubkey.asc marutter_pubkey.gpg /var/lib/apt/lists/*
+EOF
+
+# # BASE NOTEBOOK
+# RUN <<EOF
+# apt-get update --yes
+
+# apt-get install --yes \
+#   "fonts-liberation=1:2.1.5-3" \
+#   "pandoc=3.1.3+ds-2"
+
+# apt-get clean --yes
+
+# rm --force --recursive /var/lib/apt/lists/*
+# EOF
+
+# # MINIMAL NOTEBOOK
+# RUN <<EOF
+# apt-get update --yes
+
+# apt-get install --yes \
+#   "less=590-2ubuntu2.1" \
+#   "texlive-xetex=2023.20240207-1" \
+#   "texlive-fonts-recommended=2023.20240207-1" \
+#   "texlive-plain-generic=2023.20240207-1"
+
+# apt-get clean --yes
+
+# rm --force --recursive /var/lib/apt/lists/*
+# EOF
 
 USER ${CONTAINER_USER}
 WORKDIR /home/${CONTAINER_USER}
