@@ -252,6 +252,8 @@ RUN conda config --set channel_priority flexible \
   && fix-permissions "${CONDA_DIR}" \
   && fix-permissions "${HOME}"
 
+RUN conda install sqlite --force-reinstall
+
 USER ${CONTAINER_USER}
 WORKDIR ${HOME}
 EXPOSE 8080
