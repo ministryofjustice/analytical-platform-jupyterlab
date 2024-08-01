@@ -131,14 +131,6 @@ cat marutter_pubkey.asc | gpg --dearmor --output marutter_pubkey.gpg
 install -D --owner root --group root --mode 644 marutter_pubkey.gpg /etc/apt/keyrings/marutter_pubkey.gpg
 
 echo "deb [signed-by=/etc/apt/keyrings/marutter_pubkey.gpg] https://cloud.r-project.org/bin/linux/ubuntu noble-cran40/" > /etc/apt/sources.list.d/cran.list
-
-apt-get update --yes
-
-apt-get install --yes "r-base=${R_VERSION}"
-
-apt-get clean --yes
-
-rm --force --recursive marutter_pubkey.asc marutter_pubkey.gpg /var/lib/apt/lists/*
 EOF
 
 # Copy a script that we will use to correct permissions after running certain commands
@@ -228,6 +220,38 @@ RUN git clone https://github.com/PAIR-code/facets \
 RUN MPLBACKEND=Agg python -c "import matplotlib.pyplot" && \
   fix-permissions "${HOME}"
 
+RUN conda config --set channel_priority flexible \
+  && conda install --yes \
+    "r-base==${R_VERSION%%-*}" \
+    "r-caret" \
+    "r-crayon" \
+    # not installable because there are no viable options. r-devtools 2.4.5 would require r-base >=4.3,<4.4.0a0
+    # "r-devtools" \
+    "r-e1071" \
+    "r-forecast" \
+    "r-hexbin" \
+    "r-htmltools" \
+    "r-htmlwidgets" \
+    "r-irkernel" \
+    # not installable because there are no viable options. r-nycflights13 1.0.2 would require r-base >=4.3,<4.4.0a0
+    # "r-nycflights13" \
+    "r-randomforest" \
+    # not installable because there are no viable options. r-rcurl [1.98_1.12-1.98_1.16] would require r-base >=4.3,<4.4.0a0
+    # "r-rcurl" \
+    "r-rmarkdown" \
+    "r-rodbc" \
+    "r-rsqlite" \
+    "r-shiny" \
+    # r-tidymodels [1.1.0-1.2.0] would require r-base >=4.3,<4.4.0a0
+    # "r-tidymodels" \
+    # r-tidyverse 2.0.0 would require r-base >=4.3,<4.4.0a0
+    # "r-tidyverse" \
+    # rpy2 3.5.11 would require r-base >=4.3,<4.4.0a0
+    # "rpy2" \
+    "unixodbc" \
+  && conda clean --all -f -y \
+  && fix-permissions "${CONDA_DIR}" \
+  && fix-permissions "${HOME}"
 
 # # BASE NOTEBOOK
 # RUN <<EOF
