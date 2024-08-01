@@ -28,6 +28,7 @@ commandTests:
     command: "conda"
     args: ["info"]
     expectedOutput: [".*active environment.*"]
+    excludedError: [".+"]
 
   - name: "pip"
     command: "pip"
