@@ -209,8 +209,7 @@ RUN conda install --yes \
 
 WORKDIR /tmp
 # note: facets GitHub repo archived as of 2024-07-24, still in jupyterlab image
-# RUN git clone https://github.com/PAIR-code/facets --branch 1.0.0 && \
-RUN git clone https://github.com/PAIR-code/facets \
+RUN git clone https://github.com/PAIR-code/facets --branch 1.0.0 \
   && jupyter nbclassic-extension install facets/facets-dist/ --sys-prefix \
   && rm -rf /tmp/facets \
   && fix-permissions "${CONDA_DIR}" \
@@ -252,34 +251,6 @@ RUN conda config --set channel_priority flexible \
   && conda clean --all -f -y \
   && fix-permissions "${CONDA_DIR}" \
   && fix-permissions "${HOME}"
-
-# # BASE NOTEBOOK
-# RUN <<EOF
-# apt-get update --yes
-
-# apt-get install --yes \
-#   "fonts-liberation=1:2.1.5-3" \
-#   "pandoc=3.1.3+ds-2"
-
-# apt-get clean --yes
-
-# rm --force --recursive /var/lib/apt/lists/*
-# EOF
-
-# # MINIMAL NOTEBOOK
-# RUN <<EOF
-# apt-get update --yes
-
-# apt-get install --yes \
-#   "less=590-2ubuntu2.1" \
-#   "texlive-xetex=2023.20240207-1" \
-#   "texlive-fonts-recommended=2023.20240207-1" \
-#   "texlive-plain-generic=2023.20240207-1"
-
-# apt-get clean --yes
-
-# rm --force --recursive /var/lib/apt/lists/*
-# EOF
 
 USER ${CONTAINER_USER}
 WORKDIR ${HOME}
