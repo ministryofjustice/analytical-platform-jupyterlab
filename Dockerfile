@@ -66,6 +66,11 @@ RUN apt-get update --yes \
     "unzip=6.0-28ubuntu4" \
     "vim-tiny=2:9.1.0016-1ubuntu7.1" \
     "xclip=0.13-3" \
+    # SCIPY NOTEBOOK
+    "build-essential=12.10ubuntu1" \
+    "cm-super=0.3.4-17" \
+    "dvipng=1.15-1.1" \
+    "ffmpeg=7:6.1.1-3ubuntu5" \
   && apt-get clean --yes \
   && rm --force --recursive /var/lib/apt/lists/* \
   && install --directory --owner ${CONTAINER_USER} --group ${CONTAINER_GROUP} --mode 0755 /opt/jupyterlab
@@ -173,6 +178,55 @@ EXPOSE ${JUPYTER_PORT}
 
 # Add an R mimetype option to specify how the plot returns from R to the browser
 COPY --chown=${CONTAINER_UID}:${CONTAINER_GID} src/lib/R/etc/Rprofile.site "${CONDA_DIR}/lib/R/etc/"
+
+# scipy notebook packages
+RUN conda install --yes \
+    "bottleneck==1.3.7" \
+    "conda-forge::blas=2.123=openblas" \
+    "cython" \
+    "matplotlib-base==3.8.4" \
+    "sqlalchemy==2.0.30" \
+    "altair==5.0.1" \
+    "beautifulsoup4==4.12.3" \
+    "bokeh==3.4.1" \
+    "cloudpickle==3.0.0" \
+    "dask-expr==1.1.0" \
+    "dask==2024.5.0" \
+    "dill==0.3.8" \
+    "h5py==3.11.0" \
+    "ipympl==0.9.4" \
+    "ipywidgets==8.1.2" \
+    "numba==0.60.0" \
+    "numexpr==2.8.7" \
+    "openpyxl==3.1.5" \
+    "pandas==2.2.2" \
+    "patsy==0.5.6" \
+    "protobuf==4.25.3" \
+    "scikit-image==0.23.2" \
+    "scikit-learn==1.5.1" \
+    "scipy==1.12.0" \
+    "seaborn==0.13.2" \
+    "statsmodels==0.14.2" \
+    "sympy==1.12" \
+    "widgetsnbextension==4.0.10" \
+    "xlrd==2.0.1" \
+  && conda clean --all -f -y \
+  && fix-permissions "${CONDA_DIR}" \
+  && fix-permissions "${HOME}"
+
+
+WORKDIR /tmp
+# note: facets GitHub repo archived as of 2024-07-24, still in jupyterlab image
+# RUN git clone https://github.com/PAIR-code/facets --branch 1.0.0 && \
+RUN git clone https://github.com/PAIR-code/facets \
+  && jupyter nbclassic-extension install facets/facets-dist/ --sys-prefix \
+  && rm -rf /tmp/facets \
+  && fix-permissions "${CONDA_DIR}" \
+  && fix-permissions "${HOME}"
+
+# Import matplotlib the first time to build the font cache
+RUN MPLBACKEND=Agg python -c "import matplotlib.pyplot" && \
+  fix-permissions "${HOME}"
 
 
 # # BASE NOTEBOOK
