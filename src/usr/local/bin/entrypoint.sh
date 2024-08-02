@@ -1,21 +1,22 @@
 #!/usr/bin/env bash
 
 # Restore Bash configuration
-if [[ ! -f "/home/analyticalplatform/.bashrc" ]]; then
-  cp /opt/jupyterlab/.bashrc /home/analyticalplatform/.bashrc
+if [[ ! -f "${HOME}/.bashrc" ]]; then
+  cp /opt/jupyterlab/.bashrc ${HOME}/.bashrc
 fi
 
-if [[ ! -f "/home/analyticalplatform/.bash_logout" ]]; then
-  cp /opt/jupyterlab/.bash_logout /home/analyticalplatform/.bash_logout
+if [[ ! -f "${HOME}/.bash_logout" ]]; then
+  cp /opt/jupyterlab/.bash_logout ${HOME}/.bash_logout
 fi
 
-if [[ ! -f "/home/analyticalplatform/.profile" ]]; then
-  cp /opt/jupyterlab/.profile /home/analyticalplatform/.profile
+if [[ ! -f "${HOME}/.profile" ]]; then
+  cp /opt/jupyterlab/.profile ${HOME}/.profile
 fi
 
 # Create workspace directory
-if [[ ! -d "/home/analyticalplatform/workspace" ]]; then
-  mkdir --parent /home/analyticalplatform/workspace
+if [[ ! -d "${HOME}/workspace" ]]; then
+  mkdir --parent "${HOME}/workspace" \
+    && fix-permissions "${HOME}"
 fi
 
 jupyter lab \
@@ -26,4 +27,4 @@ jupyter lab \
   --IdentityProvider.token="" \
   --LabApp.extension_manager="readonly" \
   --ServerApp.terminado_settings="shell_command=['/bin/bash']" \
-  --notebook-dir="/home/analyticalplatform/workspace"
+  --notebook-dir="${HOME}/workspace"
