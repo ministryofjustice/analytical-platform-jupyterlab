@@ -252,7 +252,9 @@ RUN conda config --set channel_priority flexible \
   && fix-permissions "${CONDA_DIR}" \
   && fix-permissions "${HOME}"
 
-RUN conda install sqlite --force-reinstall
+# resolves error: ImportError: .../_sqlite3...: undefined symbol: sqlite3_deserialize
+# see https://askubuntu.com/a/1475359
+RUN find /opt/conda/lib/ -name '*libsqlite3.so*' -delete
 
 USER ${CONTAINER_USER}
 WORKDIR ${HOME}
