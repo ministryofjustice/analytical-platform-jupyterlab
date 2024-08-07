@@ -1,4 +1,4 @@
-FROM public.ecr.aws/ubuntu/ubuntu@sha256:4f5ca1c8b7abe2bd1162e629cafbd824c303b98954b1a168526aca6021f8affe
+FROM public.ecr.aws/ubuntu/ubuntu@sha256:288b44a1b2dfe3788255c3abd41e346bece153b9e066325f461f605425afaf82
 
 LABEL org.opencontainers.image.vendor="Ministry of Justice" \
       org.opencontainers.image.authors="Analytical Platform (analytical-platform@digital.justice.gov.uk)" \
@@ -11,13 +11,13 @@ ENV CONTAINER_USER="analyticalplatform" \
     CONTAINER_GROUP="analyticalplatform" \
     CONTAINER_GID="1000" \
     DEBIAN_FRONTEND="noninteractive" \
+    PIP_BREAK_SYSTEM_PACKAGES="1" \
+    JUPYTERLAB_VERSION="4.2.4" \
+    JUPYTERLAB_GIT_VERSION="0.50.1" \
     MINICONDA_VERSION="24.5.0-0" \
     MINICONDA_SHA256="4b3b3b1b99215e85fd73fb2c2d7ebf318ac942a457072de62d885056556eb83e" \
     NODE_LTS_VERSION="20.15.1" \
-    JUPYTERLAB_VERSION="4.2.4" \
-    JUPYTERLAB_GIT_VERSION="0.50.1" \
     R_VERSION="4.4.1-1.2404.0" \
-    PIP_BREAK_SYSTEM_PACKAGES="1" \
     PATH="/opt/conda/bin:${HOME}/.local/bin:${PATH}"
 
 SHELL ["/bin/bash", "-e", "-u", "-o", "pipefail", "-c"]
@@ -46,12 +46,12 @@ apt-get update --yes
 apt-get install --yes \
   "apt-transport-https=2.7.14build2" \
   "ca-certificates=20240203" \
-  "curl=8.5.0-2ubuntu10.1" \
+  "curl=8.5.0-2ubuntu10.2" \
   "git=1:2.43.0-1ubuntu7.1" \
   "gpg=2.4.4-2ubuntu17" \
   "jq=1.7.1-3build1" \
   "mandoc=1.14.6-1" \
-  "python3.12=3.12.3-1" \
+  "python3.12=3.12.3-1ubuntu0.1" \
   "python3-pip=24.0+dfsg-1ubuntu1" \
   "unzip=6.0-28ubuntu4"
 
@@ -78,19 +78,11 @@ RUN <<EOF
 cat /etc/bash.bashrc.snippet >> /etc/bash.bashrc
 EOF
 
-# NodeJS
+# JupyterLab
 RUN <<EOF
-curl --location --fail-with-body \
-  "https://deb.nodesource.com/setup_lts.x" \
-  --output "node.sh"
-
-bash node.sh
-
-apt-get install --yes "nodejs=${NODE_LTS_VERSION}-1nodesource1"
-
-apt-get clean --yes
-
-rm --force --recursive /var/lib/apt/lists/* node.sh
+pip install --no-cache-dir \
+  "jupyterlab==${JUPYTERLAB_VERSION}" \
+  "jupyterlab-git==${JUPYTERLAB_GIT_VERSION}"
 EOF
 
 # Miniconda
@@ -108,35 +100,41 @@ chown --recursive "${CONTAINER_USER}":"${CONTAINER_GROUP}" /opt/conda
 rm --force miniconda.sh
 EOF
 
-# JupyterLab
-RUN <<EOF
-conda install --yes \
-  "conda-forge::jupyterlab==${JUPYTERLAB_VERSION}" \
-  "conda-forge::jupyterlab-git==${JUPYTERLAB_GIT_VERSION}"
-
-conda clean --all
-EOF
-
-# R
+# NodeJS
 RUN <<EOF
 curl --location --fail-with-body \
-  "https://cloud.r-project.org/bin/linux/ubuntu/marutter_pubkey.asc" \
-  --output "marutter_pubkey.asc"
+  "https://deb.nodesource.com/setup_lts.x" \
+  --output "node.sh"
 
-cat marutter_pubkey.asc | gpg --dearmor --output marutter_pubkey.gpg
+bash node.sh
 
-install -D --owner root --group root --mode 644 marutter_pubkey.gpg /etc/apt/keyrings/marutter_pubkey.gpg
-
-echo "deb [signed-by=/etc/apt/keyrings/marutter_pubkey.gpg] https://cloud.r-project.org/bin/linux/ubuntu noble-cran40/" > /etc/apt/sources.list.d/cran.list
-
-apt-get update --yes
-
-apt-get install --yes "r-base=${R_VERSION}"
+apt-get install --yes "nodejs=${NODE_LTS_VERSION}-1nodesource1"
 
 apt-get clean --yes
 
-rm --force --recursive marutter_pubkey.asc marutter_pubkey.gpg /var/lib/apt/lists/*
+rm --force --recursive /var/lib/apt/lists/* node.sh
 EOF
+
+# R
+# RUN <<EOF
+# curl --location --fail-with-body \
+#   "https://cloud.r-project.org/bin/linux/ubuntu/marutter_pubkey.asc" \
+#   --output "marutter_pubkey.asc"
+
+# cat marutter_pubkey.asc | gpg --dearmor --output marutter_pubkey.gpg
+
+# install -D --owner root --group root --mode 644 marutter_pubkey.gpg /etc/apt/keyrings/marutter_pubkey.gpg
+
+# echo "deb [signed-by=/etc/apt/keyrings/marutter_pubkey.gpg] https://cloud.r-project.org/bin/linux/ubuntu noble-cran40/" > /etc/apt/sources.list.d/cran.list
+
+# apt-get update --yes
+
+# apt-get install --yes "r-base=${R_VERSION}"
+
+# apt-get clean --yes
+
+# rm --force --recursive marutter_pubkey.asc marutter_pubkey.gpg /var/lib/apt/lists/*
+# EOF
 
 # # BASE NOTEBOOK
 # RUN <<EOF
