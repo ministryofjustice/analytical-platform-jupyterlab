@@ -16,7 +16,7 @@ ENV CONTAINER_USER="analyticalplatform" \
     JUPYTERLAB_GIT_VERSION="0.50.1" \
     MINICONDA_VERSION="24.5.0-0" \
     MINICONDA_SHA256="4b3b3b1b99215e85fd73fb2c2d7ebf318ac942a457072de62d885056556eb83e" \
-    NODE_LTS_VERSION="20.15.1" \
+    NODE_LTS_VERSION="20.16.0" \
     R_VERSION="4.4.1-1.2404.0" \
     PATH="/opt/conda/bin:${HOME}/.local/bin:${PATH}"
 
