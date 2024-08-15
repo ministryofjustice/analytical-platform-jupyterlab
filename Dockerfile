@@ -1,4 +1,4 @@
-FROM public.ecr.aws/ubuntu/ubuntu@sha256:288b44a1b2dfe3788255c3abd41e346bece153b9e066325f461f605425afaf82
+FROM ghcr.io/ministryofjustice/analytical-platform-cloud-development-environment-base@sha256:c5b1ca761b4a9db72506ed23831c525df52e5398177c041638d8f0b80c47356e
 
 LABEL org.opencontainers.image.vendor="Ministry of Justice" \
       org.opencontainers.image.authors="Analytical Platform (analytical-platform@digital.justice.gov.uk)" \
