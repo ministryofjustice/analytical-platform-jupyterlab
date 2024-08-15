@@ -1,5 +1,5 @@
 ---
-name: Build and Test
+name: 🧪 Test
 
 on:
   pull_request:
@@ -9,8 +9,8 @@ on:
 permissions: {}
 
 jobs:
-  build-and-test:
-    name: Build and Test
+  test:
+    name: Test
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -21,10 +21,12 @@ jobs:
 
       - name: Set Up Container Structure Test
         id: setup_container_structure_test
-        uses: ministryofjustice/github-actions/setup-container-structure-test@72fe7d2b80a33b5e3f23dffa31236bd45027450b # v18.1.1
+        uses: ministryofjustice/github-actions/setup-container-structure-test@8e1bfc920f829ce408a5ef84118fbc160e559066 # v18.1.2
 
-      - name: Build and Test
-        id: build_and_test
+      - name: Test
+        id: test
         shell: bash
+        env:
+          IMAGE_TAG: ${{ github.sha }}
         run: |
           make test

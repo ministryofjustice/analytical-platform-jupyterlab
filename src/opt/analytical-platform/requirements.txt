@@ -1,0 +1,2 @@
+jupyterlab==4.2.4
+jupyterlab-git==0.50.1

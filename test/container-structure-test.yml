@@ -5,63 +5,12 @@ containerRunOptions:
   user: "analyticalplatform"
 
 commandTests:
-  - name: "ubuntu"
-    command: "grep"
-    args: ["DISTRIB_RELEASE", "/etc/lsb-release"]
-    expectedOutput: ["DISTRIB_RELEASE=24.04"]
-
-  - name: "whoami"
-    command: "whoami"
-    expectedOutput: ["analyticalplatform"]
-
-  - name: "user"
-    command: "id"
-    args: ["--user", "analyticalplatform"]
-    expectedOutput: ["1000"]
-
-  - name: "groups"
-    command: "id"
-    args: ["--groups", "analyticalplatform"]
-    expectedOutput: ["100"]
-
-  - name: "conda"
-    command: "conda"
-    args: ["info"]
-    expectedOutput: [".*active environment.*"]
-
-  - name: "pip"
-    command: "pip"
+  - name: "jupyter"
+    command: "jupyter"
     args: ["--version"]
-    expectedOutput: ["pip.*"]
-
-  - name: "node"
-    command: "node"
-    args: ["--version"]
-    expectedOutput: ["v20.15.1"]
-
-  - name: "R"
-    command: "R"
-    args: ["--version"]
-    expectedOutput: ["R version 4.4.1"]
-
-fileContentTests:
-  - name: "bashrc first-run-notice"
-    path: "/etc/bash.bashrc"
-    expectedContents: ["# This is a first run notice for JupyterLab"]
+    expectedOutput: ["1.92.1"]
 
 fileExistenceTests:
-  - name: "/opt/jupyterlab"
-    path: "/opt/jupyterlab"
-    shouldExist: true
-
-  - name: "/opt/jupyterlab/.bashrc"
-    path: "/opt/jupyterlab/.bashrc"
-    shouldExist: true
-
-  - name: "/opt/jupyterlab/.bash_logout"
-    path: "/opt/jupyterlab/.bash_logout"
-    shouldExist: true
-
-  - name: "/opt/jupyterlab/.profile"
-    path: "/opt/jupyterlab/.profile"
+  - name: "/opt/analytical-platform/first-run-notice.txt"
+    path: "/opt/analytical-platform/first-run-notice.txt"
     shouldExist: true

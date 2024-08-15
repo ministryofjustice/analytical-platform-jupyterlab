@@ -1,6 +1,0 @@
-# This is a first run notice for JupyterLab
-if [[ -t 1 ]] && [[ "${TERM}" = "xterm-256color" ]] && [[ ! -f "/opt/jupyterlab/first-run-notice-already-displayed" ]]; then
-  cat /opt/jupyterlab/first-run-notice.txt
-  # Mark first run notice as displayed after 10s to avoid problems with fast terminal refreshes hiding it
-  ((sleep 10s; touch "/opt/jupyterlab/first-run-notice-already-displayed") &)
-fi

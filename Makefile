@@ -1,18 +1,21 @@
-IMAGE_NAME = ghcr.io/ministryofjustice/analytical-platform-jupyterlab:latest
+.PHONY: test build run
 
-test: build
-	container-structure-test test --platform linux/amd64 --config test/container-structure-test.yml --image $(IMAGE_NAME)
+IMAGE_NAME ?= ghcr.io/ministryofjustice/analytical-platform-jupyterlab
+IMAGE_TAG  ?= local
 
 run: build
-	docker run -it --rm --publish 8080:8080 ghcr.io/ministryofjustice/analytical-platform-jupyterlab:latest
+	docker run --rm -it --publish 8080:8080 $(IMAGE_NAME):$(IMAGE_TAG)
+
+test: build
+	container-structure-test test --platform linux/amd64 --config test/container-structure-test.yml --image $(IMAGE_NAME):$(IMAGE_TAG)
 
 build:
-	@ARCH=`uname -m`; \
+	@ARCH=`uname --machine`; \
 	case $$ARCH in \
 	aarch64 | arm64) \
 		echo "Building on $$ARCH architecture"; \
-		docker build --platform linux/amd64 --file Dockerfile --tag $(IMAGE_NAME) . ;; \
+		docker build --platform linux/amd64 --file Dockerfile --tag $(IMAGE_NAME):$(IMAGE_TAG) . ;; \
 	*) \
 		echo "Building on $$ARCH architecture"; \
-		docker build --file Dockerfile --tag $(IMAGE_NAME) . ;; \
+		docker build --file Dockerfile --tag $(IMAGE_NAME):$(IMAGE_TAG) . ;; \
 	esac
