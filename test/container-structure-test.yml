@@ -1,0 +1,16 @@
+---
+schemaVersion: 2.0.0
+
+containerRunOptions:
+  user: "analyticalplatform"
+
+commandTests:
+  - name: "jupyter"
+    command: "jupyter"
+    args: ["--version"]
+    expectedOutput: ["jupyterlab       : 4.2.4"]
+
+fileExistenceTests:
+  - name: "/opt/analytical-platform/first-run-notice.txt"
+    path: "/opt/analytical-platform/first-run-notice.txt"
+    shouldExist: true
