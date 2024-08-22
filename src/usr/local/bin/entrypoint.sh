@@ -12,4 +12,4 @@ jupyter lab \
   --IdentityProvider.token="" \
   --LabApp.extension_manager="readonly" \
   --ServerApp.terminado_settings="shell_command=['/bin/bash']" \
-  --notebook-dir="/home/analyticalplatform/workspace"
+  --notebook-dir="/home/analyticalplatform"

@@ -6,9 +6,6 @@ LABEL org.opencontainers.image.vendor="Ministry of Justice" \
       org.opencontainers.image.description="JupyterLab image for Analytical Platform" \
       org.opencontainers.image.url="https://github.com/ministryofjustice/analytical-platform-jupyterlab"
 
-ENV JUPYTERLAB_VERSION="4.2.4" \
-    JUPYTERLAB_GIT_VERSION="0.50.1"
-
 SHELL ["/bin/bash", "-e", "-u", "-o", "pipefail", "-c"]
 
 # First Run Notice
