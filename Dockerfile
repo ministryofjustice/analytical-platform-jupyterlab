@@ -17,6 +17,12 @@ RUN <<EOF
 pip install --no-cache-dir --requirement ${ANALYTICAL_PLATFORM_DIRECTORY}/requirements.txt
 EOF
 
+# R Kernel
+COPY --chown=nobody:nobody --chmod=0755 src/usr/local/bin/install-r-kernel.sh /usr/local/bin/install-r-kernel.sh
+RUN <<EOF
+bash /usr/local/bin/install-r-kernel.sh
+EOF
+
 USER ${CONTAINER_USER}
 WORKDIR /home/${CONTAINER_USER}
 EXPOSE 8080
