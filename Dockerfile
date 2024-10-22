@@ -12,15 +12,17 @@ SHELL ["/bin/bash", "-e", "-u", "-o", "pipefail", "-c"]
 COPY --chown="${CONTAINER_USER}:${CONTAINER_GROUP}" --chmod=0644 src${ANALYTICAL_PLATFORM_DIRECTORY}/first-run-notice.txt ${ANALYTICAL_PLATFORM_DIRECTORY}/first-run-notice.txt
 
 # JupyterLab
-COPY --chown="${CONTAINER_USER}:${CONTAINER_GROUP}" --chmod=0644 src${ANALYTICAL_PLATFORM_DIRECTORY}/requirements.txt ${ANALYTICAL_PLATFORM_DIRECTORY}/requirements.txt
+COPY --chown="${CONTAINER_USER}:${CONTAINER_GROUP}" --chmod=0644 src${ANALYTICAL_PLATFORM_DIRECTORY}/requirements-jupyterlab.txt ${ANALYTICAL_PLATFORM_DIRECTORY}/requirements-jupyterlab.txt
 RUN <<EOF
-pip install --no-cache-dir --requirement ${ANALYTICAL_PLATFORM_DIRECTORY}/requirements.txt
+pip install --no-cache-dir --requirement ${ANALYTICAL_PLATFORM_DIRECTORY}/requirements-jupyterlab.txt
 EOF
 
-# SciPy
-COPY --chown="${CONTAINER_USER}:${CONTAINER_GROUP}" --chmod=0644 src${ANALYTICAL_PLATFORM_DIRECTORY}/scipy-requirements.txt ${ANALYTICAL_PLATFORM_DIRECTORY}/scipy-requirements.txt
+# Base + SciPy
+# Base is used by users when installing with different versions of Python
+COPY --chown="${CONTAINER_USER}:${CONTAINER_GROUP}" --chmod=0644 src${ANALYTICAL_PLATFORM_DIRECTORY}/requirements-base.txt ${ANALYTICAL_PLATFORM_DIRECTORY}/requirements-base.txt
+COPY --chown="${CONTAINER_USER}:${CONTAINER_GROUP}" --chmod=0644 src${ANALYTICAL_PLATFORM_DIRECTORY}/requirements-scipy.txt ${ANALYTICAL_PLATFORM_DIRECTORY}/requirements-scipy.txt
 RUN <<EOF
-conda install --yes --file ${ANALYTICAL_PLATFORM_DIRECTORY}/scipy-requirements.txt
+conda install --yes --file ${ANALYTICAL_PLATFORM_DIRECTORY}/requirements-scipy.txt
 EOF
 
 USER ${CONTAINER_USER}
