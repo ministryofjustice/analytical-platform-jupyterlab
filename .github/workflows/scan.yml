@@ -19,29 +19,11 @@ jobs:
         id: checkout
         uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871 # v4.2.1
 
-      - name: Free Disk Space
-        id: free_disk_space
-        shell: bash
-        run: |
-          df -h /
-          echo "Pruning cached tools"
-          # https://github.com/actions/runner-images/issues/2840#issuecomment-2272410832
-          sudo rm -rf \
-            /opt/hostedtoolcache \
-            /opt/google/chrome \
-            /opt/microsoft/msedge \
-            /opt/microsoft/powershell \
-            /opt/pipx \
-            /usr/lib/mono \
-            /usr/local/julia* \
-            /usr/local/lib/android \
-            /usr/local/lib/node_modules \
-            /usr/local/share/chromium \
-            /usr/local/share/powershell \
-            /usr/share/dotnet \
-            /usr/share/swift
-          echo "Disk space after cleanup..."
-          df -h /
+      - name: Clean Actions Runner
+        id: clean_actions_runner
+        uses: jacobwoffenden/github-actions-runner-debug/.github/actions/clean-actions-runner@main
+        with:
+          confirm: true
 
       - name: Build
         id: build
