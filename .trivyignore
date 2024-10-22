@@ -5,6 +5,9 @@ CVE-2024-43882
 ## setuptools
 CVE-2024-6345 # TODO: @jacobwoffenden - Figure out where this comes from and patch it
 
+## imagecodecs
+GHSA-94vc-p8w7-5p49
+
 # .NET
 ## We are running the latest dotnet-sdk from Ubuntu
 CVE-2024-0057
