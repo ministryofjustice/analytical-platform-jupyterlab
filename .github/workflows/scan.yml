@@ -19,6 +19,31 @@ jobs:
         id: checkout
         uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871 # v4.2.1
 
+      - name: Free up disk space
+        id: free_up_disk_space
+        shell: bash
+        run: |
+          echo "Disk space before cleanup..."
+          df -h /
+          echo "Removing unnecessary files to free up disk space..."
+          # https://github.com/actions/runner-images/issues/2840#issuecomment-2272410832
+          sudo rm -rf \
+            /opt/hostedtoolcache \
+            /opt/google/chrome \
+            /opt/microsoft/msedge \
+            /opt/microsoft/powershell \
+            /opt/pipx \
+            /usr/lib/mono \
+            /usr/local/julia* \
+            /usr/local/lib/android \
+            /usr/local/lib/node_modules \
+            /usr/local/share/chromium \
+            /usr/local/share/powershell \
+            /usr/share/dotnet \
+            /usr/share/swift
+          echo "Disk space after cleanup..."
+          df -h /
+
       - name: DEBUG
         id: debug_before_build
         shell: bash
@@ -46,7 +71,6 @@ jobs:
         env:
           TRIVY_DB_REPOSITORY: public.ecr.aws/aquasecurity/trivy-db:2
           TRIVY_JAVA_DB_REPOSITORY: public.ecr.aws/aquasecurity/trivy-java-db:1
-          TRIVY_PARALLEL: 1
         with:
           image-ref: ghcr.io/${{ github.repository }}:${{ github.sha }}
           severity: HIGH,CRITICAL
