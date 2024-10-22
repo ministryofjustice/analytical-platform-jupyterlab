@@ -34,6 +34,7 @@ jobs:
         env:
           TRIVY_DB_REPOSITORY: public.ecr.aws/aquasecurity/trivy-db:2
           TRIVY_JAVA_DB_REPOSITORY: public.ecr.aws/aquasecurity/trivy-java-db:1
+          TRIVY_PARALLEL: 1
         with:
           image-ref: ghcr.io/${{ github.repository }}:${{ github.sha }}
           severity: HIGH,CRITICAL
