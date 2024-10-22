@@ -17,6 +17,12 @@ RUN <<EOF
 pip install --no-cache-dir --requirement ${ANALYTICAL_PLATFORM_DIRECTORY}/requirements.txt
 EOF
 
+# SciPy
+COPY --chown="${CONTAINER_USER}:${CONTAINER_GROUP}" --chmod=0644 src${ANALYTICAL_PLATFORM_DIRECTORY}/scipy-requirements.txt ${ANALYTICAL_PLATFORM_DIRECTORY}/scipy-requirements.txt
+RUN <<EOF
+conda install --yes --file ${ANALYTICAL_PLATFORM_DIRECTORY}/scipy-requirements.txt
+EOF
+
 USER ${CONTAINER_USER}
 WORKDIR /home/${CONTAINER_USER}
 EXPOSE 8080
