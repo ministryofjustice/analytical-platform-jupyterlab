@@ -28,6 +28,12 @@ jobs:
         run: |
           make build
 
+      - name: DEBUG
+        id: debug_before
+        shell: bash
+        run: |
+          df -h
+
       - name: Scan
         id: scan
         uses: aquasecurity/trivy-action@915b19bbe73b92a6cf82a1bc12b087c9a19a5fe2 # v0.28.0
@@ -39,3 +45,10 @@ jobs:
           image-ref: ghcr.io/${{ github.repository }}:${{ github.sha }}
           severity: HIGH,CRITICAL
           exit-code: 1
+
+      - name: DEBUG
+        if: always()
+        id: debug_after
+        shell: bash
+        run: |
+          df -h
