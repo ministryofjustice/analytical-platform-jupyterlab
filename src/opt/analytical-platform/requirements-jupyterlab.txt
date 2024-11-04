@@ -1,2 +1,5 @@
 jupyterlab==4.2.5
 jupyterlab-git==0.50.1
+
+# Adding per User Research
+cmake==3.30.5

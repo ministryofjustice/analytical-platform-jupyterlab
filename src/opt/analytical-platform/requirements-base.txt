@@ -1,4 +1,1 @@
 ipykernel
-
-# Adding per User Research
-cmake==3.30.5
