@@ -43,3 +43,7 @@ docker image inspect --format='{{index .RepoDigests 0}}' ghcr.io/ministryofjusti
 ### JupyterLab
 
 Dependabot is configured to manage the packages in [`src/opt/analytical-platform/requirements.txt`](src/opt/analytical-platform/requirements.txt)
+
+## Maintenance
+
+Maintenance of this component is scheduled in this [workflow](https://github.com/ministryofjustice/analytical-platform/blob/main/.github/workflows/schedule-issue-jupyterlab.yml), which generates a maintenance ticket as per this [example](https://github.com/ministryofjustice/analytical-platform/issues/5903).
