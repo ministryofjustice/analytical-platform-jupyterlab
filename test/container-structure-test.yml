@@ -8,7 +8,7 @@ commandTests:
   - name: "jupyter"
     command: "jupyter"
     args: ["--version"]
-    expectedOutput: ["jupyterlab       : 4.2.5"]
+    expectedOutput: ["jupyterlab\\s+: 4.3.4"]
 
 fileExistenceTests:
   - name: "/opt/analytical-platform/first-run-notice.txt"
