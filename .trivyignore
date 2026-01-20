@@ -26,3 +26,9 @@ CVE-2024-41110 # Vulnerability in github.com/docker/docker, but we don't run Doc
 CVE-2024-34156
 CVE-2024-45337
 CVE-2024-45338
+
+
+CVE-2025-22868 exp:2026-02-05
+CVE-2025-47907 exp:2026-02-05
+CVE-2025-58183 exp:2026-02-05
+CVE-2025-61729 exp:2026-02-05
