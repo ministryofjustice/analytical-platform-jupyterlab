@@ -23,14 +23,14 @@ CVE-2026-21441 exp:2026-02-05
 
 # # .NET
 # ## We are running the latest dotnet-sdk from Ubuntu
-# CVE-2024-0057
+CVE-2024-0057 exp:2026-03-05
 # CVE-2024-38095
 
 # Go
 ## aws-sso
 # CVE-2024-41110 # Vulnerability in github.com/docker/docker, but we don't run Docker on CDE
 # CVE-2024-34156
-# CVE-2024-45337
+CVE-2024-45337 exp:2026-03-05
 # CVE-2024-45338
 CVE-2025-22868 exp:2026-02-05
 CVE-2025-47907 exp:2026-02-05
