@@ -1,4 +1,4 @@
-jupyterlab==4.3.4
-jupyterlab-git==0.50.2
-notebook==7.3.2
+jupyterlab==4.5.7
+jupyterlab-git==0.54.0
+notebook==7.5.6
 nbclassic==1.1.0

@@ -1,5 +1,5 @@
 ---
-name: 🩻 Scan
+name: Scan Container
 
 on:
   pull_request:
@@ -9,31 +9,12 @@ on:
 permissions: {}
 
 jobs:
-  scan:
-    name: Scan
-    runs-on: ubuntu-latest
+  scan-container:
     permissions:
       contents: read
-    steps:
-      - name: Checkout
-        id: checkout
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      id-token: write
+      pull-requests: write
+      security-events: write
+      actions: read
+    uses: ministryofjustice/analytical-platform-github-actions/.github/workflows/reusable-container-scan.yml@497b26456c1f0cff118cf5f663b66794d368f3e8 # v8.0.2
 
-      - name: Clean Actions Runner
-        id: clean_actions_runner
-        uses: ministryofjustice/github-actions/clean-actions-runner@db1a54895bf5fb975c60af47e5a3aab96505ca3e # v18.6.0
-        with:
-          confirm: true
-
-      - name: Build
-        id: build
-        shell: bash
-        env:
-          IMAGE_NAME: ghcr.io/${{ github.repository }}
-          IMAGE_TAG: ${{ github.sha }}
-        run: |
-          make build
-
-      - name: Scan
-        id: scan
-        run: exit 0 # trivy-action step removed
