@@ -21,6 +21,7 @@ EOF
 # Base is used by users when installing with different versions of Python
 COPY --chown="${CONTAINER_USER}:${CONTAINER_GROUP}" --chmod=0644 src${ANALYTICAL_PLATFORM_DIRECTORY}/requirements-base.txt ${ANALYTICAL_PLATFORM_DIRECTORY}/requirements-base.txt
 COPY --chown="${CONTAINER_USER}:${CONTAINER_GROUP}" --chmod=0644 src${ANALYTICAL_PLATFORM_DIRECTORY}/requirements-scipy.txt ${ANALYTICAL_PLATFORM_DIRECTORY}/requirements-scipy.txt
+COPY --chown="${CONTAINER_USER}:${CONTAINER_GROUP}" --chmod=0644 src${ANALYTICAL_PLATFORM_DIRECTORY}/environment-scipy.yml ${ANALYTICAL_PLATFORM_DIRECTORY}/environment-scipy.yml
 
 USER ${CONTAINER_USER}
 WORKDIR /home/${CONTAINER_USER}

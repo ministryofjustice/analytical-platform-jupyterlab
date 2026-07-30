@@ -1,0 +1,7 @@
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - blas=*=openblas
+  - matplotlib-base=3.9.2
+  - pytables=3.10.1
